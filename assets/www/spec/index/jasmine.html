@@ -1,0 +1,172 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+  "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+  <title>Jasmine Test - index.js</title>
+  <link rel="stylesheet" type="text/css" href="jasmine.css">
+  <script type="text/javascript" src="jasmine.js"></script>
+  <script type="text/javascript" src="jasmine-html.js"></script>
+  <script type="text/javascript" src="jasmineCompleteReporter.js"></script>
+  <script src="jquery.js"></script>
+  
+  <script src='jasmine.blanket.js'></script>
+</head>
+<body>
+<script type="text/javascript">
+    /*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+describe('app', function() {
+    describe('initialize', function() {
+        it('should bind deviceready', function() {
+            runs(function() {
+                spyOn(app, 'onDeviceReady');
+                app.initialize();
+                helper.trigger(window.document, 'deviceready');
+            });
+
+            waitsFor(function() {
+                return (app.onDeviceReady.calls.length > 0);
+            }, 'onDeviceReady should be called once', 500);
+
+            runs(function() {
+                expect(app.onDeviceReady).toHaveBeenCalled();
+            });
+        });
+    });
+
+    describe('onDeviceReady', function() {
+        it('should report that it fired', function() {
+            spyOn(app, 'receivedEvent');
+            app.onDeviceReady();
+            expect(app.receivedEvent).toHaveBeenCalledWith('deviceready');
+        });
+    });
+
+    describe('receivedEvent', function() {
+        beforeEach(function() {
+            var el = document.getElementById('stage');
+            el.innerHTML = ['<div id="deviceready">',
+                            '    <p class="event listening">Listening</p>',
+                            '    <p class="event received">Received</p>',
+                            '</div>'].join('\n');
+        });
+
+        it('should hide the listening element', function() {
+            app.receivedEvent('deviceready');
+            var displayStyle = helper.getComputedStyle('#deviceready .listening', 'display');
+            expect(displayStyle).toEqual('none');
+        });
+
+        it('should show the received element', function() {
+            app.receivedEvent('deviceready');
+            var displayStyle = helper.getComputedStyle('#deviceready .received', 'display');
+            expect(displayStyle).toEqual('block');
+        });
+    });
+});
+
+    
+    
+    
+    
+    var myParent = window.parent;
+    var jasmineEnv = jasmine.getEnv();
+    jasmineEnv.updateInterval = 1000;
+
+    var htmlReporter = new jasmine.HtmlReporter();
+    var reportRunnerResults = htmlReporter.reportRunnerResults;
+
+    htmlReporter.reportRunnerResults = function(runner) {
+        reportRunnerResults(runner);
+    
+        
+       
+        
+        
+        var specs = runner.specs();
+        var specResults;
+        var assertionCount = {total: 0, passed: 0, failed: 0};
+        var result = {};
+        for (var i = 0; i < specs.length; ++i) {
+            if (this.specFilter(specs[i])) {
+                specResults = specs[i].results();
+                assertionCount.total += specResults.totalCount;
+                assertionCount.passed += specResults.passedCount;
+                assertionCount.failed += specResults.failedCount;
+            }
+        }
+    
+        if (console && console.log) {
+            console.log('Total: ' + assertionCount.total);
+            console.log('Passed: ' + assertionCount.passed);
+            console.log('Failed: ' + assertionCount.failed);
+        }
+        
+        
+        if (assertionCount.failed) {
+            result.status = "failed";
+            result.message = assertionCount.failed + " failures";
+        } else {
+            result.status = "passed";
+            result.message = "Success! " + assertionCount.passed + " passed";
+        }
+        
+        if(myParent.reportComplete) {
+            console.log("myParent.reportComplete", result);
+            myParent.reportComplete(result);
+        }
+        
+        var totals = document.querySelectorAll(".grand-total .rs");
+        if(myParent.coverageComplete) {
+            myParent.coverageComplete({
+                message: totals && totals[0] ? totals[0].innerHTML + " coverage" : "No coverage"
+            });
+        }
+        
+    };
+   
+    jasmineEnv.addReporter(htmlReporter);
+    
+    jasmineEnv.specFilter = function(spec) {
+        return htmlReporter.specFilter(spec);
+    };
+
+    var currentWindowOnload = window.onload;
+                                                      
+    window.onload = function() {
+        if (currentWindowOnload) {
+            currentWindowOnload();
+        }
+        execJasmine();
+    };
+
+    function execJasmine() {
+        var oldCallback = jasmineEnv.currentRunner().finishCallback;
+        jasmineEnv.currentRunner().finishCallback = function () {
+            oldCallback.apply(this, arguments);
+            console.log(this, arguments);
+            
+            htmlReporter.reportRunnerResults();
+           
+        };
+        jasmineEnv.execute();
+    }
+</script>
+</body>
+</html>

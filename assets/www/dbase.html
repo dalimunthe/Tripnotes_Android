@@ -1,0 +1,98 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
+
+    <link rel="stylesheet" type="text/css" href="css/jquery.mobile.flatui.css" />
+    <link rel="stylesheet" type="text/css" href="css/jqm-datebox.min.css" />
+
+    <script type="text/javascript" src="js/jquery/jquery.min.js"></script>
+    <script type="text/javascript" src="js/jquery/jquery.mobile-1.4.0-rc.1.min.js"></script>
+
+    <script type="text/javascript" src="js/datepicker/jquery.mousewheel.min.js"></script>
+
+    <script type="text/javascript" src="js/datepicker/jqm-datebox.core.min.js"></script>
+    <script type="text/javascript" src="js/datepicker/jqm-datebox-1.1.0.mode.datebox.min.js"></script>
+    <script type="text/javascript" src="js/datepicker/jqm-datebox.mode.calbox.min.js"></script>
+    <script type="text/javascript" src="js/datepicker/jquery.mobile.datebox.i18n.en_US.utf8.js"></script>
+
+    <title>Tripnotes Record</title>
+
+</head>
+
+<body onload="onBodyLoad()">
+    <div data-role="page" data-theme="b">
+        <div data-role="header" data-position="fixed" data-close-btn="right">
+            <h1>Tripnotes Record</h1>
+        </div>
+        <div data-role="content" data-dialog="true">
+            <input type="hidden" id="id" />
+
+            <input type="text" name="textinput-hide" id="judul" placeholder="Title" value="">
+
+            <textarea cols="40" rows="8" name="textinput-hide" id="deskripsi" placeholder="Description" style="height:40%; width:100%"></textarea>
+
+            <input name="textinput-hide" id="tanggal" placeholder="Date" type="date" data-role="datebox" data-options='{"mode": "datebox"}'>
+            <select name="select-choice-a" id="kategori" data-native-menu="false">
+                <option>Category</option>
+                <option value="Pariwisata Pantai">Pariwisata Pantai</option>
+                <option value="Pariwisata Etnik">Pariwisata Etnik</option>
+                <option value="Pariwisata Budaya">Pariwisata Budaya</option>
+                <option value="Pariwisata Rekreasi">Pariwisata Rekreasi</option>
+                <option value="Pariwisata Alam">Pariwisata Alam</option>
+                <option value="Pariwisata Kota">Pariwisata Kota</option>
+                <option value="Resort City">Resort City</option>
+                <option value="Pariwisata Agro">Pariwisata Agro</option>
+                <option value="Pariwisata Urban">Pariwisata Urban</option>
+                <option value="Pariwisata Sosial">Pariwisata Sosial</option>
+                <option value="Pariwisata Alternatif">Pariwisata Alternatif</option>
+            </select>
+
+
+            <input type="hidden" id="gambar" />
+            <input type="hidden" id="tanggalG1" />
+
+            <input type="hidden" id="gambar2" />
+            <input type="hidden" id="tanggalG2" />
+
+            <input type="hidden" id="lintang" />
+            <input type="hidden" id="bujur" />
+
+            <input type="button" value="Refresh Location" onclick="onDeviceReady();" />
+            <button data-role="button" data-icon="flat-camera" onclick="takePhoto();">Capture 1st Photo</button>
+            <button data-role="button" data-icon="flat-camera" onclick="takePhoto2();">Capture 2nd Photo</button>
+            <br>
+            <fieldset class="ui-grid-b">
+                <div class="ui-block-a">
+                    <button data-role="button" data-icon="flat-plus" onClick="insertRecord()">Insert</button>
+                </div>
+                <div class="ui-block-b">
+
+                </div>
+                <div class="ui-block-c">
+                    <a data-ajax="false" href="start.html" data-role="button" data-icon="flat-cross" onClick="resetForm()">Cancel</a>
+
+                </div>
+            </fieldset>
+            <div style="display: none;">
+                <div id="hasil"></div>
+                <div id="hasilBangunan"></div>
+                <div id="hasilBuatan"></div>
+                <div id="hasilAlam"></div>
+            </div>
+
+        </div>
+    </div>
+    <!-- End Utama -->
+    <script type="text/javascript" src="js/dbase/tripnotes.js"></script>
+    <script type="text/javascript" src="phonegap.js"></script>
+    <script type="text/javascript" src="js/look/index.js"></script>
+    <script type="text/javascript">
+        app.initialize();
+    </script>
+</body>
+
+</html>
+
